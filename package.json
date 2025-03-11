@@ -1,0 +1,27 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxtjs-alt/axios": "^1.1.0",
+    "@pinia/nuxt": "^0.10.1",
+    "@vueuse/core": "^13.0.0",
+    "@vueuse/integrations": "^13.0.0",
+    "axios": "^1.8.2",
+    "crypto": "^1.0.1",
+    "nodemailer": "^6.10.0",
+    "nuxt": "^3.16.0",
+    "pinia": "^3.0.1",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "vue3-apexcharts": "^1.8.0",
+    "vuetify": "^3.7.15"
+  }
+}

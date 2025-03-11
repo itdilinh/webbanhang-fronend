@@ -1,0 +1,65 @@
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fullname VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    address TEXT,
+    role ENUM('admin', 'user') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE categories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE products (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    stock INT DEFAULT 0,
+    category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
+    image_url TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    total_price DECIMAL(10,2) NOT NULL,
+    status ENUM('pending', 'paid', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE order_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL
+);
+CREATE TABLE payments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+    payment_method ENUM('VNPay', 'Cash', 'Momo') NOT NULL,
+    transaction_id VARCHAR(255) UNIQUE,
+    status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE discounts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(50) UNIQUE NOT NULL,
+    discount_percent INT CHECK (discount_percent BETWEEN 1 AND 100),
+    expiry_date TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE order_discounts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+    discount_id UUID REFERENCES discounts(id) ON DELETE CASCADE,
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ Cấu trúc database tối ưu cho NestJS.
+ Hỗ trợ phân quyền, thanh toán, giảm giá, thống kê.
+ Sử dụng UUID thay vì ID tự tăng để tăng bảo mật.
+ Dễ mở rộng, bảo trì.
+
